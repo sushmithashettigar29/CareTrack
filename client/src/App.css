@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+.bg-blue-500{
+    background-color: #4F4F5B;
+}
+.color-welcome{
+    color: #4F4F5B;
+}
+input{
+    outline: none;
+}
