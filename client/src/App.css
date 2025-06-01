@@ -1,11 +1,13 @@
 @import "tailwindcss";
-
-.bg-blue-500{
-    background-color: #4F4F5B;
+/* @plugin "daisyui";
+@plugin "daisyui" {
+  themes: light --default, cmyk;
+} */
+input,
+select {
+  border: 0.1px solid #c2c2c5;
+  outline: none;
 }
-.color-welcome{
-    color: #4F4F5B;
-}
-input{
-    outline: none;
+button {
+  background-color: #4f4f5b;
 }
