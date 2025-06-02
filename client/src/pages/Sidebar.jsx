@@ -5,6 +5,7 @@ import {
   FaFileMedical,
   FaSignOutAlt,
   FaCalendarAlt,
+  FaRegCalendarCheck
 } from "react-icons/fa";
 
 function Sidebar() {
@@ -33,6 +34,12 @@ function Sidebar() {
             className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-100"
           >
             <FaCalendarAlt /> Appointments
+          </Link>
+          <Link
+            to="/get-appointment"
+            className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-100"
+          >
+            <FaRegCalendarCheck /> Get Appointment
           </Link>
           <Link
             to="/doctors"
