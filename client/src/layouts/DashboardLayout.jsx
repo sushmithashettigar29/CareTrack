@@ -15,7 +15,7 @@ const DashboardLayout = ({ children }) => {
       {/* Main Section */}
       <div className="ml-60 flex flex-col w-full">
         {/* Top Navbar */}
-        <header className="flex justify-between items-center px-8 py-6 bg-white sticky  rounded-xl">
+        <header className="flex justify-between items-center px-3 py-3 mx-3 mt-3 bg-amber-200 sticky rounded-2xl">
           {/* Search Input */}
           <div className="w-full max-w-md">
             <h3 className="text-xl font-semibold pl-4">
@@ -24,7 +24,7 @@ const DashboardLayout = ({ children }) => {
           </div>
 
           {/* User Info */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 pr-4">
             <img
               src={`https://ui-avatars.com/api/?name=${user.name}`}
               alt="avatar"

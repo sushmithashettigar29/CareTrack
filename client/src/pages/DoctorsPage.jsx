@@ -23,6 +23,17 @@ function DoctorsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const doctorsPerPage = 6;
 
+  // Add these states for the appointment popup
+  const [showAppointmentPopup, setShowAppointmentPopup] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [formData, setFormData] = useState({
+    date: "",
+    time: "",
+    reason: "",
+  });
+  const [appointmentMessage, setAppointmentMessage] = useState("");
+  const [appointmentError, setAppointmentError] = useState("");
+
   const storedUser = localStorage.getItem("userInfo");
   const user = storedUser ? JSON.parse(storedUser) : null;
 
@@ -133,6 +144,63 @@ function DoctorsPage() {
     }
   };
 
+  // New functions for appointment booking
+  const openAppointmentPopup = (doctor) => {
+    setSelectedDoctor(doctor);
+    setShowAppointmentPopup(true);
+    setFormData({
+      date: "",
+      time: "",
+      reason: "",
+    });
+    setAppointmentMessage("");
+    setAppointmentError("");
+  };
+
+  const closeAppointmentPopup = () => {
+    setShowAppointmentPopup(false);
+    setSelectedDoctor(null);
+  };
+
+  const handleAppointmentChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleAppointmentSubmit = async (e) => {
+    e.preventDefault();
+    setAppointmentError("");
+    setAppointmentMessage("");
+
+    try {
+      const res = await fetch("http://localhost:5000/api/appointments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          doctorId: selectedDoctor._id,
+          ...formData,
+        }),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.message || "Booking failed");
+      }
+
+      const result = await res.json();
+      setAppointmentMessage(result.message);
+      setFormData({ date: "", time: "", reason: "" });
+      // Close popup after 2 seconds if successful
+      setTimeout(() => {
+        closeAppointmentPopup();
+      }, 2000);
+    } catch (err) {
+      setAppointmentError(err.message);
+    }
+  };
+
   const filteredDoctors = doctors.filter((doctor) => {
     const matchesSearch =
       doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -182,7 +250,7 @@ function DoctorsPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 px-6 py-0">
+      <div className="space-y-4 px-6 py-3 relative bg-amber-200 rounded-3xl">
         {/* Header with title, search, filter, and pagination */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
           <h1 className="text-2xl font-bold text-gray-800">
@@ -300,8 +368,90 @@ function DoctorsPage() {
                 onApprove={handleApprove}
                 onReject={handleReject}
                 onDelete={handleDelete}
+                onBookAppointment={openAppointmentPopup}
               />
             ))}
+          </div>
+        )}
+
+        {/* Appointment Booking Popup */}
+        {showAppointmentPopup && selectedDoctor && (
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold">
+                  Book Appointment with {selectedDoctor.name}
+                </h2>
+                <button
+                  onClick={closeAppointmentPopup}
+                  className="text-gray-500 hover:text-gray-700 text-2xl"
+                >
+                  &times;
+                </button>
+              </div>
+
+              {appointmentMessage && (
+                <p className="text-green-600 mb-4">{appointmentMessage}</p>
+              )}
+              {appointmentError && (
+                <p className="text-red-500 mb-4">{appointmentError}</p>
+              )}
+
+              <form onSubmit={handleAppointmentSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Date
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="date"
+                      name="date"
+                      value={formData.date}
+                      onChange={handleAppointmentChange}
+                      className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                      min={new Date().toISOString().split("T")[0]}
+                    />
+                    <FaCalendarAlt className="absolute right-3 top-3 text-gray-400" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Time
+                  </label>
+                  <input
+                    type="time"
+                    name="time"
+                    value={formData.time}
+                    onChange={handleAppointmentChange}
+                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Reason for Appointment
+                  </label>
+                  <textarea
+                    name="reason"
+                    value={formData.reason}
+                    onChange={handleAppointmentChange}
+                    className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    rows="3"
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+                >
+                  Book Appointment
+                </button>
+              </form>
+            </div>
           </div>
         )}
       </div>

@@ -18,9 +18,11 @@ function Sidebar() {
   };
 
   return (
-    <aside className="h-full   w-64 bg-white shadow-md  fixed flex flex-col justify-between">
+    <aside className="h-[95vh] w-56 bg-amber-200 shadow-md m-3 fixed flex flex-col justify-between rounded-2xl" >
       <div className="p-6">
-        <h1 className="text-2xl font-bold text-blue-600 mb-8">CareTrack</h1>
+        <h1 className="text-2xl font-bold text-blue-600 mb-8 text-center">
+          CareTrack
+        </h1>
 
         <nav className="space-y-4 text-gray-700 text-base">
           <Link
