@@ -31,9 +31,11 @@ exports.getPatientRecords = async (req, res) => {
     const { search } = req.query;
 
     // In your controller
-if (req.user.role === "Patient" && String(req.user._id) !== String(id)) {
-  return res.status(403).json({ message: "Can only view your own records" });
-}
+    if (req.user.role === "Patient" && String(req.user._id) !== String(id)) {
+      return res
+        .status(403)
+        .json({ message: "Can only view your own records" });
+    }
     let filter = { patientId: id };
 
     if (search) {
@@ -61,7 +63,7 @@ exports.getDoctorRecords = async (req, res) => {
     const { id } = req.params;
     const { search } = req.query;
 
-    if (req.user.role !== "Doctor" || req.user._id !== id) {
+    if (req.user.role !== "Doctor" || req.user._id.toString() !== id) {
       return res.status(403).json({ message: "Access denied" });
     }
 
@@ -137,5 +139,22 @@ exports.deleteMedicalRecord = async (req, res) => {
     res.status(200).json({ message: "Medical record deleted" });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+// Admin to get all records
+exports.getAllMedicalRecords = async (req, res) => {
+  try {
+    if (req.user.role !== "Admin") {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const records = await MedicalRecord.find()
+      .populate("doctorId", "name")
+      .populate("patientId", "name");
+
+    res.json(records);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 };

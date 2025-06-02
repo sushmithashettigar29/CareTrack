@@ -1,75 +1,58 @@
-import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaUserMd,
   FaFileMedical,
-  FaComments,
-  FaCog,
   FaSignOutAlt,
   FaCalendarAlt,
 } from "react-icons/fa";
 
 function Sidebar() {
-  return (
-  <aside className="h-[95vh] mt-4 ml-4 w-64 bg-white border shadow-md rounded-2xl fixed flex flex-col justify-between">
+  const navigate = useNavigate();
 
-      {/* Top Branding & Nav */}
+  const handleLogout = () => {
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("userInfo");
+    navigate("/login");
+  };
+
+  return (
+    <aside className="h-[95vh] mt-4 ml-4 w-64 bg-white border shadow-md rounded-2xl fixed flex flex-col justify-between">
       <div className="p-6">
-        {/* Logo */}
         <h1 className="text-2xl font-bold text-blue-600 mb-8">CareTrack</h1>
 
-        {/* Navigation */}
         <nav className="space-y-4 text-gray-700 text-base">
-          <a
-            href="#"
+          <Link
+            to="/overview"
             className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-100"
           >
             <FaHome /> Overview
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="/appointments"
             className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-100"
           >
             <FaCalendarAlt /> Appointments
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="/doctors"
             className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-100"
           >
             <FaUserMd /> Doctors
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="/medical-records"
             className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-100"
           >
             <FaFileMedical /> Medical Records
-          </a>
-          {/* <a
-            href="#"
-            className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-100 relative"
-          >
-            <FaComments /> Chats
-            <span className="absolute right-3 top-2 bg-red-500 text-white text-xs font-bold rounded-full px-2">
-              10
-            </span>
-          </a> */}
+          </Link>
 
-          {/* <div className="pt-6 border-t text-sm text-gray-500 uppercase">
-            Account
-          </div> */}
-          {/* 
-          <a
-            href="#"
-            className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-100"
-          >
-            <FaCog /> Settings
-          </a> */}
-          <a
-            href="#"
-            className="flex items-center gap-3 p-2 rounded-lg text-red-600 hover:bg-red-100"
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 p-2 rounded-lg text-red-600 hover:bg-red-100 w-full text-left"
           >
             <FaSignOutAlt /> Logout
-          </a>
+          </button>
         </nav>
       </div>
     </aside>

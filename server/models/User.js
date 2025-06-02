@@ -20,20 +20,25 @@ const userSchema = new mongoose.Schema(
       default: "Patient",
     },
     specialization: { type: String },
-    isApproved: { type: Boolean, default: false },
+    isApproved: { type: Boolean, default: false }, // For doctors only
+    isRejected: { type: Boolean, default: false }, // <-- Add this line
   },
   { timestamps: true }
 );
 
 userSchema.pre("save", async function (next) {
+  // Remove doctor-specific fields if not Doctor
   if (this.role !== "Doctor") {
     this.isApproved = undefined;
+    this.isRejected = undefined; // <-- Reset for non-doctors
     this.specialization = undefined;
   }
+
   if (this.isModified("password")) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
   }
+
   next();
 });
 

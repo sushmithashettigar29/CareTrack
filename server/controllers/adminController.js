@@ -118,3 +118,24 @@ exports.getAdminStats = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Reject a doctor
+exports.rejectDoctor = async (req, res) => {
+  try {
+    const doctor = await User.findById(req.params.id);
+
+    if (!doctor || doctor.role !== "Doctor") {
+      return res.status(404).json({ message: "Doctor not found" });
+    }
+
+    doctor.isRejected = true;
+    doctor.isApproved = false;
+
+    await doctor.save();
+
+    res.status(200).json({ message: "Doctor rejected successfully" });
+  } catch (error) {
+    console.error("Reject doctor error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

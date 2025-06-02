@@ -7,6 +7,7 @@ const {
   approveDoctor,
   deleteUser,
   getAdminStats,
+  rejectDoctor,
 } = require("../controllers/adminController");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
@@ -19,5 +20,6 @@ router.get("/doctors/approved", protect, adminOnly, getapprovedDoctors);
 router.put("/approve-doctor/:id", protect, adminOnly, approveDoctor);
 router.delete("/delete-user/:id", protect, adminOnly, deleteUser);
 router.get("/stats", protect, adminOnly, getAdminStats);
+router.put("/reject-doctor/:id", protect, adminOnly, rejectDoctor);
 
 module.exports = router;
