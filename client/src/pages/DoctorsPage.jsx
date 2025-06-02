@@ -1,11 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { FaUserMd, FaEnvelope, FaPhone } from "react-icons/fa";
+import {
+  FaUserMd,
+  FaEnvelope,
+  FaPhone,
+  FaCalendarAlt,
+  FaStar,
+  FaClinicMedical,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
+import { MdVerified, MdPending, MdCancel } from "react-icons/md";
 import DashboardLayout from "../layouts/DashboardLayout";
+import { Spinner } from "../components/Spinner";
+import { DoctorCard } from "../components/DoctorCard";
 
 function DoctorsPage() {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const doctorsPerPage = 6;
 
   const storedUser = localStorage.getItem("userInfo");
   const user = storedUser ? JSON.parse(storedUser) : null;
@@ -62,7 +78,9 @@ function DoctorsPage() {
       if (!res.ok) throw new Error("Failed to approve doctor");
 
       setDoctors((prev) =>
-        prev.map((doc) => (doc._id === id ? { ...doc, isApproved: true } : doc))
+        prev.map((doc) =>
+          doc._id === id ? { ...doc, isApproved: true, isRejected: false } : doc
+        )
       );
     } catch (err) {
       alert(err.message || "Approve failed");
@@ -70,6 +88,8 @@ function DoctorsPage() {
   };
 
   const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this doctor?")) return;
+
     try {
       const res = await fetch(
         `http://localhost:5000/api/admin/delete-user/${id}`,
@@ -113,83 +133,177 @@ function DoctorsPage() {
     }
   };
 
-  if (loading) return <div className="p-6">Loading doctors...</div>;
-  if (error) return <div className="p-6 text-red-600">Error: {error}</div>;
+  const filteredDoctors = doctors.filter((doctor) => {
+    const matchesSearch =
+      doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doctor.specialization?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    let matchesFilter = true;
+    if (filter === "approved") matchesFilter = doctor.isApproved;
+    if (filter === "pending")
+      matchesFilter = !doctor.isApproved && !doctor.isRejected;
+    if (filter === "rejected") matchesFilter = doctor.isRejected;
+
+    return matchesSearch && matchesFilter;
+  });
+
+  const indexOfLastDoctor = currentPage * doctorsPerPage;
+  const indexOfFirstDoctor = indexOfLastDoctor - doctorsPerPage;
+  const currentDoctors = filteredDoctors.slice(
+    indexOfFirstDoctor,
+    indexOfLastDoctor
+  );
+  const totalPages = Math.ceil(filteredDoctors.length / doctorsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const nextPage = () =>
+    currentPage < totalPages && setCurrentPage(currentPage + 1);
+  const prevPage = () => currentPage > 1 && setCurrentPage(currentPage - 1);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, searchTerm]);
+
+  if (loading)
+    return (
+      <DashboardLayout>
+        <div className="p-6 flex justify-center">
+          <Spinner size="lg" />
+        </div>
+      </DashboardLayout>
+    );
+
+  if (error)
+    return (
+      <DashboardLayout>
+        <div className="p-6 text-red-600">Error: {error}</div>
+      </DashboardLayout>
+    );
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 p-6 bg-white rounded-lg shadow">
-        <h2 className="text-2xl font-bold mb-6 text-blue-600">All Doctors</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {doctors.map((doc) => (
-            <div
-              key={doc._id}
-              className="border rounded-2xl p-4 shadow-md bg-white"
-            >
-              <div className="flex items-center gap-4">
-                <FaUserMd className="text-3xl text-blue-500" />
-                <div>
-                  <h3 className="text-lg font-semibold">{doc.name}</h3>
-                  <p className="text-sm text-gray-500 capitalize">
-                    {doc.specialization || "General"}
-                  </p>
-                  <p className="text-sm text-gray-600 flex items-center gap-1">
-                    <FaEnvelope /> {doc.email}
-                  </p>
-                  <p className="text-sm text-gray-600 flex items-center gap-1">
-                    <FaPhone /> {doc.phone}
-                  </p>
-                </div>
+      <div className="space-y-6 px-6 py-0">
+        {/* Header with title, search, filter, and pagination */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+          <h1 className="text-2xl font-bold text-gray-800">
+            Doctors Directory
+          </h1>
+
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto items-center">
+            {/* Search and Filter */}
+            <div className="flex flex-col sm:flex-row gap-3 w-full">
+              <div className="relative flex-grow">
+                <input
+                  type="text"
+                  placeholder="Search doctors..."
+                  className="w-full h-[42px] pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <svg
+                  className="absolute left-3 top-3 h-5 w-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  ></path>
+                </svg>
               </div>
 
-              {/* Actions */}
-              <div className="mt-4 flex flex-wrap gap-2">
-                {(user?.role === "Patient" || user?.role === "Doctor") && (
-                  <button
-                    onClick={() =>
-                      alert(`Book appointment with Dr. ${doc.name}`)
-                    }
-                    className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600"
-                  >
-                    Get Appointment
-                  </button>
-                )}
-
-                {user?.role === "Admin" && (
-                  <>
-                    <button
-                      onClick={() => handleApprove(doc._id)}
-                      className="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600 disabled:opacity-50"
-                      disabled={doc.isApproved}
-                      title={
-                        doc.isApproved ? "Already approved" : "Approve doctor"
-                      }
-                    >
-                      Approve
-                    </button>
-                    <button
-                      onClick={() => handleReject(doc._id)}
-                      className="bg-yellow-500 text-white px-4 py-1 rounded hover:bg-yellow-600 disabled:opacity-50"
-                      disabled={doc.isRejected}
-                      title={
-                        doc.isRejected ? "Already rejected" : "Reject doctor"
-                      }
-                    >
-                      Reject
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(doc._id)}
-                      className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
-                    >
-                      Delete
-                    </button>
-                  </>
-                )}
-              </div>
+              {user?.role === "Admin" && (
+                <select
+                  className="border rounded-lg px-3 h-[42px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                >
+                  <option value="all">All Doctors</option>
+                  <option value="approved">Approved</option>
+                  <option value="pending">Pending</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              )}
             </div>
-          ))}
+
+            {/* Pagination Controls */}
+            {filteredDoctors.length > doctorsPerPage && (
+              <div className="flex items-center h-[42px] bg-white rounded-lg shadow-sm">
+                <button
+                  onClick={prevPage}
+                  disabled={currentPage === 1}
+                  className={`h-full px-3 flex items-center ${
+                    currentPage === 1
+                      ? "text-gray-300 cursor-not-allowed"
+                      : "text-blue-600 hover:bg-blue-50"
+                  }`}
+                >
+                  <FaChevronLeft />
+                </button>
+
+                <div className="flex h-full">
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                      key={i + 1}
+                      onClick={() => paginate(i + 1)}
+                      className={`w-10 h-full flex items-center justify-center ${
+                        currentPage === i + 1
+                          ? "bg-blue-600 text-white"
+                          : "hover:bg-gray-100"
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={nextPage}
+                  disabled={currentPage === totalPages}
+                  className={`h-full px-3 flex items-center ${
+                    currentPage === totalPages
+                      ? "text-gray-300 cursor-not-allowed"
+                      : "text-blue-600 hover:bg-blue-50"
+                  }`}
+                >
+                  <FaChevronRight />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
+
+        {/* Doctors Grid - Single Instance */}
+        {filteredDoctors.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-lg shadow">
+            <div className="text-gray-500 text-lg">No doctors found</div>
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm("")}
+                className="mt-2 text-blue-600 hover:underline"
+              >
+                Clear search
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {currentDoctors.map((doctor) => (
+              <DoctorCard
+                key={doctor._id}
+                doctor={doctor}
+                userRole={user?.role}
+                onApprove={handleApprove}
+                onReject={handleReject}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );

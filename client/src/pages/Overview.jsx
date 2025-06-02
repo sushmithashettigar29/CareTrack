@@ -79,8 +79,6 @@ function Overview() {
   return (
     <DashboardLayout>
       <div className="space-y-6 p-6 bg-white rounded-lg shadow">
-        <h3 className="text-xl font-semibold">Welcome, {user.name}!</h3>
-
         {error ? (
           <p className="text-red-600 font-medium">{error}</p>
         ) : !data ? (

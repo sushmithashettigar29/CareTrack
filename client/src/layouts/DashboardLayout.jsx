@@ -13,16 +13,14 @@ const DashboardLayout = ({ children }) => {
       <Sidebar />
 
       {/* Main Section */}
-      <div className="ml-69 flex flex-col w-full">
+      <div className="ml-60 flex flex-col w-full">
         {/* Top Navbar */}
-        <header className="flex justify-between items-center px-8 py-6 bg-white shadow sticky top-4 z-10 rounded-xl mx-4">
+        <header className="flex justify-between items-center px-8 py-6 bg-white sticky  rounded-xl">
           {/* Search Input */}
           <div className="w-full max-w-md">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <h3 className="text-xl font-semibold pl-4">
+              Welcome, {user.name}!
+            </h3>
           </div>
 
           {/* User Info */}
@@ -42,7 +40,7 @@ const DashboardLayout = ({ children }) => {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-3">{children}</main>
       </div>
     </div>
   );

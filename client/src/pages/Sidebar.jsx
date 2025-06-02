@@ -5,7 +5,7 @@ import {
   FaFileMedical,
   FaSignOutAlt,
   FaCalendarAlt,
-  FaRegCalendarCheck
+  FaRegCalendarCheck,
 } from "react-icons/fa";
 
 function Sidebar() {
@@ -18,7 +18,7 @@ function Sidebar() {
   };
 
   return (
-    <aside className="h-[95vh] mt-4 ml-4 w-64 bg-white border shadow-md rounded-2xl fixed flex flex-col justify-between">
+    <aside className="h-full   w-64 bg-white shadow-md  fixed flex flex-col justify-between">
       <div className="p-6">
         <h1 className="text-2xl font-bold text-blue-600 mb-8">CareTrack</h1>
 
