@@ -3,6 +3,19 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+
+import {
+  FaCalendarCheck,
+  FaFileMedical,
+  FaUserMd,
+  FaUserInjured,
+  FaUserCheck,
+  FaUserClock,
+  FaNotesMedical,
+} from "react-icons/fa";
+
 function Overview() {
   const user = useMemo(() => {
     return (
@@ -51,6 +64,18 @@ function Overview() {
     fetchDashboard();
   }, [user]);
 
+  // Helper to get percentage for circular progress
+  const getPercent = (value, max) => {
+    if (!value || !max || max === 0) return 0;
+    return Math.min(100, Math.round((value / max) * 100));
+  };
+
+  // Calculate dynamic max values for Admin stats to ensure circle progress is visible even for low values
+  const adminMaxDoctors = Math.max(100, data?.totalDoctors || 0);
+  const adminMaxPending = Math.max(20, data?.pendingDoctorApprovals || 0);
+  const adminMaxPatients = Math.max(150, data?.totalPatients || 0);
+  const adminMaxRecords = Math.max(300, data?.totalMedicalRecords || 0);
+
   return (
     <DashboardLayout>
       <div className="space-y-6 p-6 bg-white rounded-lg shadow">
@@ -61,22 +86,47 @@ function Overview() {
         ) : !data ? (
           <p>Loading...</p>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {/* PATIENT */}
             {user.role === "Patient" && (
               <>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-blue-100 p-4 rounded-lg text-center">
-                    <p className="text-xl font-bold">
-                      {data?.appointmentCount || 0}
-                    </p>
-                    <p>Appointments</p>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="bg-blue-100 p-6 rounded-lg text-center flex flex-col items-center">
+                    <div className="w-24 h-24 mb-3">
+                      <CircularProgressbar
+                        value={getPercent(data.appointmentCount, 20)} // Assuming max 20 appts for progress
+                        text={`${data.appointmentCount || 0}`}
+                        styles={buildStyles({
+                          pathColor: "#2563eb",
+                          textColor: "#1e40af",
+                          trailColor: "#bfdbfe",
+                          textSize: "24px",
+                        })}
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 text-blue-800 font-semibold">
+                      <FaCalendarCheck />
+                      <span>Appointments</span>
+                    </div>
                   </div>
-                  <div className="bg-green-100 p-4 rounded-lg text-center">
-                    <p className="text-xl font-bold">
-                      {data?.medicalRecordCount || 0}
-                    </p>
-                    <p>Medical Records</p>
+
+                  <div className="bg-green-100 p-6 rounded-lg text-center flex flex-col items-center">
+                    <div className="w-24 h-24 mb-3">
+                      <CircularProgressbar
+                        value={getPercent(data.medicalRecordCount, 50)} // Assuming max 50 medical records
+                        text={`${data.medicalRecordCount || 0}`}
+                        styles={buildStyles({
+                          pathColor: "#16a34a",
+                          textColor: "#166534",
+                          trailColor: "#bbf7d0",
+                          textSize: "24px",
+                        })}
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 text-green-800 font-semibold">
+                      <FaFileMedical />
+                      <span>Medical Records</span>
+                    </div>
                   </div>
                 </div>
 
@@ -95,48 +145,149 @@ function Overview() {
 
             {/* DOCTOR */}
             {user.role === "Doctor" && (
-              <div className="grid grid-cols-3 gap-4">
-                <div className="bg-yellow-100 p-4 rounded-lg text-center">
-                  <p className="text-xl font-bold">
-                    {data?.totalAppointments || 0}
-                  </p>
-                  <p>Total Appointments</p>
+              <div className="grid grid-cols-3 gap-6">
+                <div className="bg-yellow-100 p-6 rounded-lg text-center flex flex-col items-center">
+                  <div className="w-24 h-24 mb-3">
+                    <CircularProgressbar
+                      value={getPercent(data.totalAppointments, 50)} // max 50 total appointments
+                      text={`${data.totalAppointments || 0}`}
+                      styles={buildStyles({
+                        pathColor: "#ca8a04",
+                        textColor: "#854d0e",
+                        trailColor: "#fde68a",
+                        textSize: "24px",
+                      })}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 text-yellow-800 font-semibold">
+                    <FaCalendarCheck />
+                    <span>Total Appointments</span>
+                  </div>
                 </div>
-                <div className="bg-blue-100 p-4 rounded-lg text-center">
-                  <p className="text-xl font-bold">{data?.Confirmed || 0}</p>
-                  <p>Confirmed</p>
+
+                <div className="bg-blue-100 p-6 rounded-lg text-center flex flex-col items-center">
+                  <div className="w-24 h-24 mb-3">
+                    <CircularProgressbar
+                      value={getPercent(data.Confirmed, data.totalAppointments)} // % of confirmed
+                      text={`${data.Confirmed || 0}`}
+                      styles={buildStyles({
+                        pathColor: "#2563eb",
+                        textColor: "#1e40af",
+                        trailColor: "#bfdbfe",
+                        textSize: "24px",
+                      })}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 text-blue-800 font-semibold">
+                    <FaUserCheck />
+                    <span>Confirmed</span>
+                  </div>
                 </div>
-                <div className="bg-red-100 p-4 rounded-lg text-center">
-                  <p className="text-xl font-bold">{data?.Cancelled || 0}</p>
-                  <p>Cancelled</p>
+
+                <div className="bg-red-100 p-6 rounded-lg text-center flex flex-col items-center">
+                  <div className="w-24 h-24 mb-3">
+                    <CircularProgressbar
+                      value={getPercent(data.Cancelled, data.totalAppointments)} // % cancelled
+                      text={`${data.Cancelled || 0}`}
+                      styles={buildStyles({
+                        pathColor: "#dc2626",
+                        textColor: "#991b1b",
+                        trailColor: "#fecaca",
+                        textSize: "24px",
+                      })}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 text-red-800 font-semibold">
+                    <FaUserClock />
+                    <span>Cancelled</span>
+                  </div>
                 </div>
               </div>
             )}
 
             {/* ADMIN */}
             {user.role === "Admin" && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-blue-100 p-4 rounded-lg text-center">
-                  <p className="text-xl font-bold">{data?.totalDoctors || 0}</p>
-                  <p>Approved Doctors</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="bg-blue-100 p-6 rounded-lg text-center flex flex-col items-center">
+                  <div className="w-24 h-24 mb-3">
+                    <CircularProgressbar
+                      value={getPercent(data.totalDoctors, adminMaxDoctors)}
+                      text={`${data.totalDoctors || 0}`}
+                      styles={buildStyles({
+                        pathColor: "#2563eb",
+                        textColor: "#1e40af",
+                        trailColor: "#bfdbfe",
+                        textSize: "24px",
+                      })}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 text-blue-800 font-semibold">
+                    <FaUserMd />
+                    <span>Approved Doctors</span>
+                  </div>
                 </div>
-                <div className="bg-yellow-100 p-4 rounded-lg text-center">
-                  <p className="text-xl font-bold">
-                    {data?.pendingDoctorApprovals || 0}
-                  </p>
-                  <p>Pending Approvals</p>
+
+                <div className="bg-yellow-100 p-6 rounded-lg text-center flex flex-col items-center">
+                  <div className="w-24 h-24 mb-3">
+                    <CircularProgressbar
+                      value={getPercent(
+                        data.pendingDoctorApprovals,
+                        adminMaxPending
+                      )}
+                      text={`${data.pendingDoctorApprovals || 0}`}
+                      styles={buildStyles({
+                        pathColor: "#ca8a04",
+                        textColor: "#854d0e",
+                        trailColor: "#fde68a",
+                        textSize: "24px",
+                      })}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 text-yellow-800 font-semibold">
+                    <FaUserClock />
+                    <span>Pending Approvals</span>
+                  </div>
                 </div>
-                <div className="bg-green-100 p-4 rounded-lg text-center">
-                  <p className="text-xl font-bold">
-                    {data?.totalPatients || 0}
-                  </p>
-                  <p>Patients</p>
+
+                <div className="bg-green-100 p-6 rounded-lg text-center flex flex-col items-center">
+                  <div className="w-24 h-24 mb-3">
+                    <CircularProgressbar
+                      value={getPercent(data.totalPatients, adminMaxPatients)}
+                      text={`${data.totalPatients || 0}`}
+                      styles={buildStyles({
+                        pathColor: "#16a34a",
+                        textColor: "#166534",
+                        trailColor: "#bbf7d0",
+                        textSize: "24px",
+                      })}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 text-green-800 font-semibold">
+                    <FaUserInjured />
+                    <span>Patients</span>
+                  </div>
                 </div>
-                <div className="bg-purple-100 p-4 rounded-lg text-center">
-                  <p className="text-xl font-bold">
-                    {data?.totalMedicalRecords || 0}
-                  </p>
-                  <p>Medical Records</p>
+
+                <div className="bg-purple-100 p-6 rounded-lg text-center flex flex-col items-center">
+                  <div className="w-24 h-24 mb-3">
+                    <CircularProgressbar
+                      value={getPercent(
+                        data.totalMedicalRecords,
+                        adminMaxRecords
+                      )}
+                      text={`${data.totalMedicalRecords || 0}`}
+                      styles={buildStyles({
+                        pathColor: "#7c3aed",
+                        textColor: "#5b21b6",
+                        trailColor: "#ddd6fe",
+                        textSize: "24px",
+                      })}
+                    />
+                  </div>
+                  <div className="flex items-center gap-2 text-purple-800 font-semibold">
+                    <FaNotesMedical />
+                    <span>Medical Records</span>
+                  </div>
                 </div>
               </div>
             )}
