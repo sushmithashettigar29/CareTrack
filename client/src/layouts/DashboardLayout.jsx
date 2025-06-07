@@ -18,13 +18,17 @@ const DashboardLayout = ({ children }) => {
   }, []);
 
   return (
-    <div className="flex min-h-screen white-bg">
+    <div className="flex min-h-screen h-screen white-bg">
+      {/* Sidebar */}
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+
+      {/* Right Side */}
       <div
         className={`${
           collapsed ? "ml-24" : "ml-60"
-        } flex flex-col w-full transition-all duration-300`}
+        } flex flex-col w-full transition-all duration-300 min-h-screen h-screen`}
       >
+        {/* Header */}
         <header
           className={`flex justify-between items-center px-3 ${
             collapsed ? "py-3 mx-2" : "py-0 mx-3"
@@ -48,7 +52,6 @@ const DashboardLayout = ({ children }) => {
                 </div>
               </div>
             )}
-
             <div
               className={`${
                 collapsed ? "w-9 h-9" : "w-10 h-10"
@@ -63,7 +66,12 @@ const DashboardLayout = ({ children }) => {
           </div>
         </header>
 
-        <main className="flex-1 p-3">{children}</main>
+        {/* Main Content */}
+        <main className="flex-1 flex flex-col p-3 min-h-0">
+          <div className="flex-grow h-full bg-gray-100 rounded-lg">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   );

@@ -403,7 +403,7 @@ const AppointmentsPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 p-9 light-bg rounded-lg shadow">
+      <div className="space-y-6 p-9 w-full h-full bg-white rounded-lg shadow">
         {/* Header with title, search, and pagination */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Appointments</h2>

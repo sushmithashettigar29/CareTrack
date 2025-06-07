@@ -62,7 +62,7 @@ function Sidebar({ collapsed, setCollapsed }) {
   return (
     <>
       <aside
-        className={`h-[95vh] ${
+        className={`h-[97vh] ${
           collapsed ? "w-20" : "w-56"
         } medium-bg shadow-md m-3 fixed flex flex-col justify-between rounded-lg transition-all duration-300`}
       >

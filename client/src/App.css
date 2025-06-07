@@ -48,3 +48,7 @@ select {
 .hover-dark-bg:hover {
   background-color: #006a71;
 }
+
+.none{
+  display: none;
+}

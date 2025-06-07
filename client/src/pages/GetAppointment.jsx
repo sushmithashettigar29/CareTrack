@@ -66,7 +66,7 @@ function GetAppointment() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 p-12 light-bg rounded-lg shadow flex flex-col justify-center items-center">
+      <div className="space-y-6 p-12 w-full h-full bg-white rounded-lg shadow flex flex-col justify-center items-center">
         <h2 className="text-2xl font-bold mb-4">Book an Appointment</h2>
 
         {message && <p className="text-green-600 mb-4">{message}</p>}
