@@ -78,7 +78,7 @@ function Overview() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 p-6 bg-white rounded-lg shadow">
+      <div className="space-y-6 p-6 light-bg rounded-lg shadow">
         {error ? (
           <p className="text-red-600 font-medium">{error}</p>
         ) : !data ? (
@@ -131,7 +131,7 @@ function Overview() {
                 {data?.showBookAppointment && (
                   <div className="text-center mt-4">
                     <button
-                      onClick={() => navigate("/book-appointment")}
+                      onClick={() => navigate("/get-appointment")}
                       className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
                     >
                       Book My Appointment

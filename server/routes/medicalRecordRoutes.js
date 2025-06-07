@@ -8,6 +8,7 @@ const {
   updateMedicalRecord,
   deleteMedicalRecord,
   getAllMedicalRecords,
+  getRecordsByAppointment
 } = require("../controllers/medicalRecordController");
 
 router.post("/", protect, createMedicalRecord);
@@ -16,5 +17,6 @@ router.get("/patient/:id", protect, getPatientRecords);
 router.get("/doctor/:id", protect, getDoctorRecords);
 router.put("/:id", protect, updateMedicalRecord);
 router.delete("/:id", protect, deleteMedicalRecord);
+router.get("/appointment/:id", protect, getRecordsByAppointment);
 
 module.exports = router;

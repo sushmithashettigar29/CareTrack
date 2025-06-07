@@ -5,9 +5,46 @@
 } */
 input,
 select {
-  border: 0.1px solid #c2c2c5;
+  border: 0.1px solid #f2efe7;
   outline: none;
 }
-/* button {
-  background-color: #4f4f5b;
-} */
+
+.black-color {
+  color: #2b2d42;
+}
+.black-bg {
+  background-color: #2b2d42;
+}
+
+.white-bg {
+  background-color: #f2efe7;
+}
+.dark-bg {
+  background-color: #006a71;
+}
+.medium-bg {
+  background-color: #48a6a7;
+}
+.light-bg {
+  background-color: #b9d4aa8c;
+}
+
+.white-color {
+  color: #f2efe7;
+}
+.dark-color {
+  color: #006a71;
+}
+.medium-color {
+  color: #48a6a7;
+}
+.light-color {
+  color: #86e0ea47;
+}
+
+.hover-dark-color:hover {
+  color: #006a71;
+}
+.hover-dark-bg:hover {
+  background-color: #006a71;
+}

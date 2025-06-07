@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import DoctorWaiting from "./pages/DoctorWaiting";
 import Overview from "./pages/Overview";
 import AppointmentsPage from "./pages/AppointmentsPage";
 import MedicalRecordsPage from "./pages/MedicalRecordsPage";
@@ -15,7 +14,6 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/doctor-waiting" element={<DoctorWaiting />} />
       <Route path="/overview" element={<Overview />} />
       <Route path="/appointments" element={<AppointmentsPage />} />
       <Route path="/medical-records" element={<MedicalRecordsPage />} />

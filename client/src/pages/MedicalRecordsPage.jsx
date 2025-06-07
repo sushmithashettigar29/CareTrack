@@ -65,11 +65,11 @@ const MedicalRecordsPage = () => {
   const filteredRecords = medicalRecords.filter((record) => {
     const searchLower = searchTerm.toLowerCase();
     return (
-      (record.doctorId?.name?.toLowerCase().includes(searchLower)) ||
-      (record.patientId?.name?.toLowerCase().includes(searchLower)) ||
-      (record.diagnosis?.toLowerCase().includes(searchLower)) ||
-      (record.prescription?.toLowerCase().includes(searchLower)) ||
-      (new Date(record.date).toLocaleDateString().includes(searchTerm))
+      record.doctorId?.name?.toLowerCase().includes(searchLower) ||
+      record.patientId?.name?.toLowerCase().includes(searchLower) ||
+      record.diagnosis?.toLowerCase().includes(searchLower) ||
+      record.prescription?.toLowerCase().includes(searchLower) ||
+      new Date(record.date).toLocaleDateString().includes(searchTerm)
     );
   });
 
@@ -84,7 +84,8 @@ const MedicalRecordsPage = () => {
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const nextPage = () => currentPage < totalPages && setCurrentPage(currentPage + 1);
+  const nextPage = () =>
+    currentPage < totalPages && setCurrentPage(currentPage + 1);
   const prevPage = () => currentPage > 1 && setCurrentPage(currentPage - 1);
 
   // Reset to first page when search changes
@@ -104,16 +105,20 @@ const MedicalRecordsPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 p-6">
+      <div className="space-y-6 p-9 light-bg rounded-lg shadow">
         {/* Header with title, search, and pagination */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">Medical Records</h2>
+            <h2 className="text-2xl font-bold text-gray-800">
+              Medical Records
+            </h2>
             {user.role === "Admin" && (
               <p className="text-gray-600">Admin view: View all records.</p>
             )}
             {user.role === "Doctor" && (
-              <p className="text-gray-600">Doctor view: View patient records.</p>
+              <p className="text-gray-600">
+                Doctor view: View patient records.
+              </p>
             )}
             {user.role === "Patient" && (
               <p className="text-gray-600">Patient view: View your history.</p>
@@ -147,7 +152,7 @@ const MedicalRecordsPage = () => {
                 >
                   <FaChevronLeft />
                 </button>
-                
+
                 <div className="flex h-full">
                   {Array.from({ length: totalPages }, (_, i) => (
                     <button
@@ -163,7 +168,7 @@ const MedicalRecordsPage = () => {
                     </button>
                   ))}
                 </div>
-                
+
                 <button
                   onClick={nextPage}
                   disabled={currentPage === totalPages}

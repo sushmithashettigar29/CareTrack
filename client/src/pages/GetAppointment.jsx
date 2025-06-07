@@ -66,13 +66,13 @@ function GetAppointment() {
 
   return (
     <DashboardLayout>
-      <div className="p-6 max-w-lg mx-auto">
+      <div className="space-y-6 p-12 light-bg rounded-lg shadow flex flex-col justify-center items-center">
         <h2 className="text-2xl font-bold mb-4">Book an Appointment</h2>
 
         {message && <p className="text-green-600 mb-4">{message}</p>}
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 w-1/2">
           <div>
             <label className="block mb-1 font-medium">Select Doctor</label>
             <select
@@ -85,7 +85,7 @@ function GetAppointment() {
               <option value="">-- Select Doctor --</option>
               {doctors.map((doc) => (
                 <option key={doc._id} value={doc._id}>
-                  {doc.name} ({doc.email})
+                  {doc.name} ({doc.specialization})
                 </option>
               ))}
             </select>

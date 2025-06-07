@@ -48,9 +48,9 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded shadow-md">
-        <h2 className="text-4xl font-bold mb-4 text-center text-blue-600">
+    <div className="flex items-center justify-center min-h-screen white-bg">
+      <div className="w-full max-w-md light-bg p-8 rounded shadow-md">
+        <h2 className="text-3xl font-bold mb-6 text-center dark-color">
           Welcome to CareTrack!
         </h2>
         <h3 className="text-2xl font-semibold mb-6 text-center text-gray-700">
@@ -64,7 +64,7 @@ const Register = () => {
             <input
               type="text"
               id="name"
-              className="w-full mt-1 p-2 border rounded"
+              className="w-full mt-1 p-2 border rounded white-bg"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -77,7 +77,7 @@ const Register = () => {
             <input
               type="email"
               id="email"
-              className="w-full mt-1 p-2 border rounded"
+              className="w-full mt-1 p-2 border rounded white-bg"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -91,7 +91,7 @@ const Register = () => {
               <input
                 type="password"
                 id="password"
-                className="w-full mt-1 p-2 border rounded"
+                className="w-full mt-1 p-2 border rounded white-bg"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -104,7 +104,7 @@ const Register = () => {
               <input
                 type="number"
                 id="phone"
-                className="w-full mt-1 p-2 border rounded"
+                className="w-full mt-1 p-2 border rounded white-bg"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 required
@@ -119,7 +119,7 @@ const Register = () => {
               <input
                 type="number"
                 id="age"
-                className="w-full mt-1 p-2 border rounded"
+                className="w-full mt-1 p-2 border rounded white-bg"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
               />
@@ -130,7 +130,7 @@ const Register = () => {
               </label>
               <select
                 id="gender"
-                className="w-full mt-1 p-2 border rounded"
+                className="w-full mt-1 p-2 border rounded white-bg"
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
               >
@@ -146,7 +146,7 @@ const Register = () => {
               </label>
               <select
                 id="role"
-                className="w-full mt-1 p-2 border rounded"
+                className="w-full mt-1 p-2 border rounded white-bg"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
               >
@@ -159,14 +159,14 @@ const Register = () => {
             <div className="mb-4">
               <label
                 htmlFor="specialization"
-                className="block text-sm font-semibold"
+                className="block text-sm font-semibold "
               >
                 Specialization
               </label>
               <input
                 type="text"
                 id="specialization"
-                className="w-full mt-1 p-2 border rounded"
+                className="w-full mt-1 p-2 border rounded white-bg"
                 value={specialization}
                 onChange={(e) => setSpecialization(e.target.value)}
                 required
@@ -176,7 +176,7 @@ const Register = () => {
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
             type="submit"
-            className="w-full py-2 bg-blue-600 text-white rounded mt-4 font-semibold hover:bg-blue-700 transition"
+            className="w-full py-2 dark-bg text-white rounded mt-4 font-semibold transition"
           >
             Register
           </button>
@@ -184,7 +184,7 @@ const Register = () => {
             Already have an account?{" "}
             <span
               onClick={navigateToLogin}
-              className="text-blue-600 hover:underline cursor-pointer font-medium"
+              className="dark-color hover:underline cursor-pointer font-medium"
             >
               Login
             </span>

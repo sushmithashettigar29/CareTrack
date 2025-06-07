@@ -33,9 +33,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded shadow-md">
-        <h2 className="text-4xl font-bold mb-4 text-center text-blue-600">
+    <div className="flex items-center justify-center min-h-screen white-bg">
+      <div className="w-full max-w-md light-bg p-8 rounded shadow-md">
+        <h2 className="text-3xl font-bold mb-6 text-center dark-color">
           Welcome to CareTrack!
         </h2>
         <h3 className="text-2xl font-semibold mb-6 text-center text-gray-700">
@@ -49,7 +49,7 @@ const Login = () => {
             <input
               type="email"
               id="email"
-              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full mt-1 p-2 border rounded focus:outline-none white-bg"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -57,13 +57,13 @@ const Login = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-semibold">
+            <label htmlFor="password" className="block text-sm font-semibold ">
               Password
             </label>
             <input
               type="password"
               id="password"
-              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full mt-1 p-2 border rounded focus:outline-none white-bg"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -73,7 +73,7 @@ const Login = () => {
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
             type="submit"
-            className="w-full py-2 bg-blue-600 text-white rounded mt-4 font-semibold hover:bg-blue-700 transition"
+            className="w-full py-2 dark-bg text-white rounded mt-4 font-semibold transition"
           >
             Login
           </button>
@@ -81,7 +81,7 @@ const Login = () => {
             Don&apos;t have an account?{" "}
             <span
               onClick={navigateToRegister}
-              className="text-blue-600 hover:underline hover:text-blue-800 font-medium cursor-pointer"
+              className="dark-color hover:underline font-medium cursor-pointer"
             >
               Register
             </span>

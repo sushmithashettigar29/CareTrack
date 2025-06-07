@@ -250,7 +250,7 @@ function DoctorsPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-4 px-6 py-3 relative bg-amber-200 rounded-3xl">
+      <div className="space-y-4 px-6 py-3 relative light-bg rounded-lg shadow">
         {/* Header with title, search, filter, and pagination */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
           <h1 className="text-2xl font-bold text-gray-800">
