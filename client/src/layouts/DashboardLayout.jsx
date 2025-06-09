@@ -18,7 +18,7 @@ const DashboardLayout = ({ children }) => {
   }, []);
 
   return (
-    <div className="flex min-h-screen h-screen white-bg">
+    <div className="flex min-h-screen h-screen">
       {/* Sidebar */}
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
@@ -68,9 +68,7 @@ const DashboardLayout = ({ children }) => {
 
         {/* Main Content */}
         <main className="flex-1 flex flex-col p-3 min-h-0">
-          <div className="flex-grow h-full bg-gray-100 rounded-lg">
-            {children}
-          </div>
+          <div className="flex-grow h-full rounded-lg">{children}</div>
         </main>
       </div>
     </div>
