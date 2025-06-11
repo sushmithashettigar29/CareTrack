@@ -3,8 +3,6 @@
 **A Fullstack Hospital Management Website for Doctors and Patients**  
 CareTrack is a user-friendly platform designed to simplify hospital interactions. Patients can register, book appointments, and manage medical records, while doctors can view appointments and medical histories — all from a unified interface.
 
-![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
-
 ---
 
 ## 🚀 Features
