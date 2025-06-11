@@ -48,7 +48,7 @@ CareTrack is a user-friendly platform designed to simplify hospital interactions
 Watch the full walkthrough here:  
 👉 ## 📹 Demo Video
 
-[![CareTrack Demo](https://youtu.be/tKiqx73z1Oo/0.jpg)](https://youtu.be/tKiqx73z1Oo)
+[![CareTrack Demo](https://img.youtube.com/vi/tKiqx73z1Oo/0.jpg)](https://youtu.be/tKiqx73z1Oo)
 
 ---
 
