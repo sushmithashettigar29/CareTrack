@@ -1,17 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { Spinner } from "../components/Spinner";
-import {
-  FaChevronLeft,
-  FaChevronRight,
-  FaSearch,
-  FaCalendarAlt,
-} from "react-icons/fa";
 import Modal from "../components/Modal";
-import { MedicalRecordForm } from "../components/appointments/MedicalRecordForm";
 import { CreateAppointmentForm } from "../components/appointments/CreateAppointmentForm";
 import { EditAppointmentForm } from "../components/appointments/EditAppointmentForm";
-import { AppointmentCard } from "../components/appointments/AppointmentCard";
+import { AppointmentsHeader } from "../components/appointments/AppointmentsHeader";
+import { AppointmentsPagination } from "../components/appointments/AppointmentsPagination";
+import { AppointmentsList } from "../components/appointments/AppointmentsList";
+import { AppointmentsEmptyState } from "../components/appointments/AppointmentsEmptyState";
+import { AppointmentsErrorState } from "../components/appointments/AppointmentsErrorState";
+import { AppointmentDetailsModal } from "../components/appointments/AppointmentDetailsModal";
 
 const AppointmentsPage = () => {
   const [user, setUser] = useState(() =>
@@ -84,7 +83,6 @@ const AppointmentsPage = () => {
 
   useEffect(() => {
     fetchAppointments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userToken, user?.role]);
 
   const fetchRecordsForAppointment = async (appointmentId) => {
@@ -246,171 +244,49 @@ const AppointmentsPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 p-4 sm:p-6 lg:p-9 w-full h-full rounded-lg ">
-        {/* Header */}
-        <div className="border-b border-gray-200 pb-4">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold dark-color">
-                Appointments
-              </h2>
-            </div>
+      <div className="space-y-6 p-4 sm:p-6 lg:p-9 w-full h-full rounded-lg">
+        <AppointmentsHeader
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
 
-            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-              <div className="relative w-full sm:w-80">
-                <input
-                  type="text"
-                  placeholder="Search appointments..."
-                  className="w-full h-[42px] pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <FaSearch className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 light-bg rounded-lg p-4">
-          <div className="text-sm dark-color">
-            Showing {currentAppointments.length} of{" "}
-            {filteredAppointments.length} appointments
-            {searchTerm && (
-              <span>
-                {" "}
-                for "{searchTerm}"
-                <button
-                  onClick={() => setSearchTerm("")}
-                  className="ml-2 text-blue-600 hover:underline"
-                >
-                  Clear
-                </button>
-              </span>
-            )}
-          </div>
-
-          {totalPages > 1 && (
-            <div className="flex items-center gap-2">
-              <button
-                onClick={prevPage}
-                disabled={currentPage === 1}
-                className={`p-2 rounded-md ${
-                  currentPage === 1
-                    ? "text-gray-300 cursor-not-allowed"
-                    : "dark-color hover:bg-blue-50"
-                }`}
-              >
-                <FaChevronLeft />
-              </button>
-
-              <div className="flex items-center gap-1">
-                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                  let pageNum;
-                  if (totalPages <= 5) {
-                    pageNum = i + 1;
-                  } else if (currentPage <= 3) {
-                    pageNum = i + 1;
-                  } else if (currentPage >= totalPages - 2) {
-                    pageNum = totalPages - 4 + i;
-                  } else {
-                    pageNum = currentPage - 2 + i;
-                  }
-
-                  return (
-                    <button
-                      key={pageNum}
-                      onClick={() => paginate(pageNum)}
-                      className={`w-8 h-8 rounded-md text-sm ${
-                        currentPage === pageNum
-                          ? "dark-bg text-white"
-                          : "hover:bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      {pageNum}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <button
-                onClick={nextPage}
-                disabled={currentPage === totalPages}
-                className={`p-2 rounded-md ${
-                  currentPage === totalPages
-                    ? "text-gray-300 cursor-not-allowed"
-                    : "dark-color hover:bg-blue-50"
-                }`}
-              >
-                <FaChevronRight />
-              </button>
-            </div>
-          )}
-        </div>
+        <AppointmentsPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          paginate={paginate}
+          prevPage={prevPage}
+          nextPage={nextPage}
+          currentAppointments={currentAppointments}
+          filteredAppointments={filteredAppointments}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        />
 
         {appointmentsError ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow border border-gray-200">
-            <div className="max-w-md mx-auto">
-              <FaCalendarAlt className="mx-auto h-12 w-12 text-red-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Error Loading Appointments
-              </h3>
-              <p className="text-red-500 mb-4">{appointmentsError}</p>
-              <button
-                onClick={fetchAppointments}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-              >
-                Retry
-              </button>
-            </div>
-          </div>
+          <AppointmentsErrorState
+            appointmentsError={appointmentsError}
+            fetchAppointments={fetchAppointments}
+          />
         ) : filteredAppointments.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow border border-gray-200">
-            <div className="max-w-md mx-auto">
-              <FaCalendarAlt className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                No Appointments Found
-              </h3>
-              <p className="text-gray-600 mb-4">
-                {searchTerm
-                  ? "Try adjusting your search terms"
-                  : "You don't have any appointments yet"}
-              </p>
-              {searchTerm ? (
-                <button
-                  onClick={() => setSearchTerm("")}
-                  className="text-blue-600 hover:underline"
-                >
-                  Clear search
-                </button>
-              ) : (
-                user?.role === "Patient" && (
-                  <button
-                    onClick={() => setShowCreateModal(true)}
-                    className="px-4 py-2 dark-bg text-white rounded-md  transition-colors"
-                  >
-                    Book Your First Appointment
-                  </button>
-                )
-              )}
-            </div>
-          </div>
+          <AppointmentsEmptyState
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            user={user}
+            setShowCreateModal={setShowCreateModal}
+          />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-            {currentAppointments.map((appointment) => (
-              <AppointmentCard
-                key={appointment._id}
-                appointment={appointment}
-                user={user}
-                onStatusChange={handleStatusChange}
-                onDelete={handleDeleteAppointment}
-                onViewDetails={handleViewDetails}
-                onEdit={handleEdit}
-              />
-            ))}
-          </div>
+          <AppointmentsList
+            currentAppointments={currentAppointments}
+            user={user}
+            handleStatusChange={handleStatusChange}
+            handleDeleteAppointment={handleDeleteAppointment}
+            handleViewDetails={handleViewDetails}
+            handleEdit={handleEdit}
+          />
         )}
       </div>
 
+      {/* Modals */}
       {showCreateModal && (
         <Modal
           onClose={() => setShowCreateModal(false)}
@@ -423,74 +299,19 @@ const AppointmentsPage = () => {
         </Modal>
       )}
 
-      {showDetailsModal && selectedAppointment && (
-        <Modal
-          onClose={() => {
-            setShowDetailsModal(false);
-            setShowRecordForm(false);
-            setIsEditingRecord(false);
-            setSelectedRecord(null);
-          }}
-          title="Appointment Details"
-        >
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <h4 className="font-medium text-gray-700">Patient</h4>
-                <p>{selectedAppointment.patientId?.name || "N/A"}</p>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-700">Doctor</h4>
-                <p>{selectedAppointment.doctorId?.name || "N/A"}</p>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-700">Date & Time</h4>
-                <p>
-                  {new Date(selectedAppointment.date).toLocaleDateString()} at{" "}
-                  {selectedAppointment.time}
-                </p>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-700">Status</h4>
-                <p>{selectedAppointment.status}</p>
-              </div>
-              <div className="col-span-2">
-                <h4 className="font-medium text-gray-700">Reason</h4>
-                <p>{selectedAppointment.reason || "-"}</p>
-              </div>
-            </div>
-
-            {/* Medical Record Section - Only for Doctors */}
-            {user?.role === "Doctor" && (
-              <div className="mt-6 border-t pt-4">
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-lg font-medium">Medical Records</h3>
-                  {!showRecordForm && (
-                    <button
-                      onClick={handleCreateRecord}
-                      className="px-3 py-3 dark-bg font-bold text-white rounded text-sm hover:bg-blue-700"
-                    >
-                      Create New Record
-                    </button>
-                  )}
-                </div>
-                {showRecordForm && (
-                  <MedicalRecordForm
-                    appointment={selectedAppointment}
-                    record={selectedRecord}
-                    onSuccess={handleRecordSuccess}
-                    onCancel={() => {
-                      setShowRecordForm(false);
-                      setIsEditingRecord(false);
-                      setSelectedRecord(null);
-                    }}
-                  />
-                )}
-              </div>
-            )}
-          </div>
-        </Modal>
-      )}
+      <AppointmentDetailsModal
+        selectedAppointment={selectedAppointment}
+        showDetailsModal={showDetailsModal}
+        setShowDetailsModal={setShowDetailsModal}
+        showRecordForm={showRecordForm}
+        setShowRecordForm={setShowRecordForm}
+        setIsEditingRecord={setIsEditingRecord}
+        setSelectedRecord={setSelectedRecord}
+        user={user}
+        handleCreateRecord={handleCreateRecord}
+        selectedRecord={selectedRecord}
+        handleRecordSuccess={handleRecordSuccess}
+      />
 
       {showEditModal && editingAppointment && (
         <Modal
