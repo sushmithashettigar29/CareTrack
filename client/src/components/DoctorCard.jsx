@@ -18,12 +18,12 @@ export function DoctorCard({
   onBookAppointment,
 }) {
   return (
-    <div className="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white">
+    <div className="border-cl rounded-xl overflow-hidden shadow">
       <div className="p-4">
         <div className="flex items-start gap-4">
           <div className="relative">
-            <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-              <FaUserMd className="text-2xl text-blue-600" />
+            <div className="w-16 h-16 rounded-full dark-bg flex items-center justify-center">
+              <FaUserMd className="text-2xl white-color" />
             </div>
             {doctor.isApproved && (
               <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1">
@@ -56,18 +56,12 @@ export function DoctorCard({
             </div>
 
             <div className="mt-1 flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+              <span className="inline-flex items-center gap-1 light-bg dark-color text-xs px-2 py-1 rounded-full">
                 <FaClinicMedical className="text-xs" />
                 <span className="capitalize">
                   {doctor.specialization || "General"}
                 </span>
               </span>
-
-              {doctor.experience && (
-                <span className="text-xs text-gray-500">
-                  {doctor.experience} years exp
-                </span>
-              )}
             </div>
           </div>
         </div>
@@ -90,12 +84,12 @@ export function DoctorCard({
           )}
         </div>
 
-        <div className="mt-4 pt-4 border-t flex flex-wrap gap-2">
+        <div className="mt-4 pt-2 pb-2 flex flex-wrap gap-2">
           {(userRole === "Patient" || userRole === "Doctor") &&
             doctor.isApproved && (
               <button
                 onClick={() => onBookAppointment(doctor)}
-                className="w-full bg-blue-600 text-white py-2 hover:bg-blue-700 transition"
+                className="w-full dark-bg font-bold white-color py-2 rounded"
               >
                 Book Appointment
               </button>

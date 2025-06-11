@@ -4,11 +4,15 @@
   themes: light --default, cmyk;
 } */
 input,
-select {
-  border: 0.1px solid #f2efe7;
+select,
+textarea {
+  border: 3px solid #b9d4aa8c;
   outline: none;
+  background-color: #ebf5f6;
 }
-
+.border-cl{
+  border: 3px solid #b9d4aa8c;
+}
 .black-color {
   color: #2b2d42;
 }
@@ -49,6 +53,22 @@ select {
   background-color: #006a71;
 }
 
-.none{
+.none {
   display: none;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
 }

@@ -64,7 +64,7 @@ function Sidebar({ collapsed, setCollapsed }) {
       <aside
         className={`h-[97vh] ${
           collapsed ? "w-20" : "w-56"
-        } medium-bg shadow-md m-3 fixed flex flex-col justify-between rounded-lg transition-all duration-300`}
+        } dark-bg shadow-md m-3 fixed flex flex-col justify-between rounded-lg transition-all duration-300`}
       >
         <div className="p-4">
           <h1

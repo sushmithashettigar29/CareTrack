@@ -32,7 +32,7 @@ const DashboardLayout = ({ children }) => {
         <header
           className={`flex justify-between items-center px-3 ${
             collapsed ? "py-3 mx-2" : "py-0 mx-3"
-          } mt-3 medium-bg sticky rounded-lg`}
+          } mt-3 dark-bg sticky rounded-lg`}
         >
           <div className="w-full max-w-md">
             <h3
@@ -58,7 +58,7 @@ const DashboardLayout = ({ children }) => {
               } rounded-full overflow-hidden`}
             >
               <img
-                src={`https://ui-avatars.com/api/?name=${user.name}&background=006a71&color=f2efe7`}
+                src={`https://ui-avatars.com/api/?name=${user.name}&background=b9d4aa8c&color=f2efe7`}
                 alt="avatar"
                 className="w-full h-full object-cover"
               />

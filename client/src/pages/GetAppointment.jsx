@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from "react";
-import DashboardLayout from "../layouts/DashboardLayout";
+"use client"
+
+import { useState, useEffect } from "react"
+import DashboardLayout from "../layouts/DashboardLayout"
 
 function GetAppointment() {
-  const userToken = localStorage.getItem("userToken");
+  const userToken = localStorage.getItem("userToken")
 
-  const [doctors, setDoctors] = useState([]);
+  const [doctors, setDoctors] = useState([])
   const [formData, setFormData] = useState({
     doctorId: "",
     date: "",
     time: "",
     reason: "",
-  });
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  })
+  const [message, setMessage] = useState("")
+  const [error, setError] = useState("")
 
   // Fetch all doctors
   useEffect(() => {
@@ -22,24 +24,24 @@ function GetAppointment() {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },
-        });
-        const data = await res.json();
-        setDoctors(data);
+        })
+        const data = await res.json()
+        setDoctors(data)
       } catch (err) {
-        setError("Failed to load doctors", err);
+        setError("Failed to load doctors", err)
       }
-    };
-    fetchDoctors();
-  }, [userToken]);
+    }
+    fetchDoctors()
+  }, [userToken])
 
   const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setMessage("");
+    e.preventDefault()
+    setError("")
+    setMessage("")
 
     try {
       const res = await fetch("http://localhost:5000/api/appointments", {
@@ -49,30 +51,30 @@ function GetAppointment() {
           Authorization: `Bearer ${userToken}`,
         },
         body: JSON.stringify(formData),
-      });
+      })
 
       if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.message || "Booking failed");
+        const errData = await res.json()
+        throw new Error(errData.message || "Booking failed")
       }
 
-      const result = await res.json();
-      setMessage(result.message);
-      setFormData({ doctorId: "", date: "", time: "", reason: "" });
+      const result = await res.json()
+      setMessage(result.message)
+      setFormData({ doctorId: "", date: "", time: "", reason: "" })
     } catch (err) {
-      setError(err.message);
+      setError(err.message)
     }
-  };
+  }
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 p-12 w-full h-full bg-white rounded-lg shadow flex flex-col justify-center items-center">
-        <h2 className="text-2xl font-bold mb-4">Book an Appointment</h2>
+      <div className="space-y-6 p-4 sm:p-6 lg:p-12 w-full h-full bg-white rounded-lg flex flex-col justify-center items-center">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-4 dark-color">Book an Appointment</h2>
 
         {message && <p className="text-green-600 mb-4">{message}</p>}
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
-        <form onSubmit={handleSubmit} className="space-y-4 w-1/2">
+        <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md sm:max-w-lg lg:max-w-xl">
           <div>
             <label className="block mb-1 font-medium">Select Doctor</label>
             <select
@@ -127,16 +129,13 @@ function GetAppointment() {
             />
           </div>
 
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
+          <button type="submit" className="dark-bg white-color font-bold px-4 py-2 rounded hover:bg-blue-700 w-full">
             Book Appointment
           </button>
         </form>
       </div>
     </DashboardLayout>
-  );
+  )
 }
 
-export default GetAppointment;
+export default GetAppointment

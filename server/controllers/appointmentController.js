@@ -133,3 +133,35 @@ exports.deleteAppointment = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Edit appointment (Patients only, content fields only)
+exports.editAppointmentByPatient = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { date, time, reason } = req.body;
+
+    const appointment = await Appointment.findById(id);
+
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+
+    // Allow only the patient who booked the appointment
+    if (String(appointment.patientId) !== String(req.user._id)) {
+      return res
+        .status(403)
+        .json({ message: "Access denied. Only the patient can edit this appointment." });
+    }
+
+    // Update fields (NOT status!)
+    if (date) appointment.date = date;
+    if (time) appointment.time = time;
+    if (reason) appointment.reason = reason;
+
+    await appointment.save();
+
+    res.status(200).json({ message: "Appointment updated", appointment });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
